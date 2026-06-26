@@ -165,7 +165,7 @@
         doc.setFont('Helvetica', 'italic');
         doc.text(`Responsável: ${responsavel}`, 4, 24);
 
-        // Gera o nome do arquivo dinâmico e faz o download
+        // Gera a etiqueta em nova tab
         const blobUrl = doc.output('bloburl');
         window.open(blobUrl, '_blank');
     }
