@@ -96,7 +96,7 @@
 
     <div class="form-group">
         <label for="responsavel">Responsável:</label>
-        <input type="text" id="responsavel" placeholder="Digite o nome do responsável">
+        <input type="text" id="responsavel" placeholder="Digite o nome do responsável" onkeydown="if(event.key === 'Enter') gerarPDF()">
     </div>
 
     <button onclick="gerarPDF()">Gerar Etiqueta</button>
