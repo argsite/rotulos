@@ -144,7 +144,7 @@
         
         // Nome do Produto (Negrito e centralizado)
         doc.setFont('Helvetica', 'bold');
-        doc.setFontSize(10);
+        doc.setFontSize(12);
         // Centraliza o texto dinamicamente nos 50mm de largura
         doc.text(produto, 25, 6, { align: 'center' });
 
@@ -154,14 +154,14 @@
 
         // Informações das Datas e Responsável
         doc.setFont('Helvetica', 'normal');
-        doc.setFontSize(8);
+        doc.setFontSize(10);
         
         doc.text(`Data: ${dataReposicao}`, 4, 13);
         doc.text(`Validade: ${validade}`, 4, 18);
         
         // Responsável com uma fonte ligeiramente diferente ou itálico
         doc.setFont('Helvetica', 'italic');
-        doc.text(`Resp: ${responsavel}`, 4, 24);
+        doc.text(`Responsável: ${responsavel}`, 4, 24);
 
         // Gera o nome do arquivo dinâmico e faz o download
         const nomeArquivo = `etiqueta_${produto.toLowerCase().replace(/[^a-z0-9]/g, '_')}.pdf`;
