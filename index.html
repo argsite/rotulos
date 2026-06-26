@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerador de Etiquetas - Almotolia</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 40px;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        h2 {
+            margin-top: 0;
+            color: #1a73e8;
+            font-size: 22px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 18px;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #4a5568;
+            font-size: 14px;
+        }
+        select, input {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 15px;
+            background-color: #fff;
+        }
+        input[readonly] {
+            background-color: #f1f5f9;
+            color: #64748b;
+            cursor: not-allowed;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background-color: #1557b0;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <h2>Etiquetas Zebra (5x3 cm)</h2>
+    
+    <div class="form-group">
+        <label for="produto">Produto:</label>
+        <select id="produto">
+            <option value="Sabonete Líquido">Sabonete Líquido</option>
+            <option value="Álcool 70%">Álcool 70%</option>
+            <option value="Água Oxigenada">Água Oxigenada</option>
+            <option value="Vaselina">Vaselina</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="dataReposicao">Data:</label>
+        <input type="text" id="dataReposicao" readonly>
+    </div>
+
+    <div class="form-group">
+        <label for="validade">Validade:</label>
+        <input type="text" id="validade" readonly>
+    </div>
+
+    <div class="form-group">
+        <label for="responsavel">Responsável:</label>
+        <input type="text" id="responsavel" placeholder="Digite o nome do responsável">
+    </div>
+
+    <button onclick="gerarPDF()">Gerar Etiqueta</button>
+</div>
+
+<script>
+    // Preenche as datas automaticamente assim que a página abre
+    window.onload = function() {
+        const hoje = new Date();
+        
+        // Formata data de hoje (DD/MM/AAAA)
+        const dia = String(hoje.getDate()).padStart(2, '0');
+        const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+        const ano = hoje.getFullYear();
+        const dataFormatada = `${dia}/${mes}/${ano}`;
+        document.getElementById('dataReposicao').value = dataFormatada;
+
+        // Calcula +7 dias para a validade
+        const dataValidade = new Date();
+        dataValidade.setDate(hoje.getDate() + 7);
+        const diaV = String(dataValidade.getDate()).padStart(2, '0');
+        const mesV = String(dataValidade.getMonth() + 1).padStart(2, '0');
+        const anoV = dataValidade.getFullYear();
+        const validadeFormatada = `${diaV}/${mesV}/${anoV}`;
+        document.getElementById('validade').value = validadeFormatada;
+    };
+
+    function gerarPDF() {
+        const { jsPDF } = window.jspdf;
+        
+        // Configura o documento exatamente para 50mm de largura por 30mm de altura
+        const doc = new jsPDF({
+            orientation: 'landscape',
+            unit: 'mm',
+            format: [50, 30]
+        });
+
+        // Pega os valores atuais da tela
+        const produto = document.getElementById('produto').value;
+        const dataReposicao = document.getElementById('dataReposicao').value;
+        const validade = document.getElementById('validade').value;
+        const responsavel = document.getElementById('responsavel').value.trim() || 'Não informado';
+
+        // --- Montagem do Layout da Etiqueta ---
+        
+        // Nome do Produto (Negrito e centralizado)
+        doc.setFont('Helvetica', 'bold');
+        doc.setFontSize(10);
+        // Centraliza o texto dinamicamente nos 50mm de largura
+        doc.text(produto, 25, 6, { align: 'center' });
+
+        // Linha divisória sutil
+        doc.setLineWidth(0.2);
+        doc.line(4, 8, 46, 8);
+
+        // Informações das Datas e Responsável
+        doc.setFont('Helvetica', 'normal');
+        doc.setFontSize(8);
+        
+        doc.text(`Data: ${dataReposicao}`, 4, 13);
+        doc.text(`Validade: ${validade}`, 4, 18);
+        
+        // Responsável com uma fonte ligeiramente diferente ou itálico
+        doc.setFont('Helvetica', 'italic');
+        doc.text(`Resp: ${responsavel}`, 4, 24);
+
+        // Gera o nome do arquivo dinâmico e faz o download
+        const nomeArquivo = `etiqueta_${produto.toLowerCase().replace(/[^a-z0-9]/g, '_')}.pdf`;
+        doc.save(nomeArquivo);
+    }
+</script>
+
+</body>
+</html>
