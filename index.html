@@ -129,7 +129,7 @@
     function gerarPDF() {
         const { jsPDF } = window.jspdf;
         
-        // Configura o documento exatamente para 50mm de largura por 30mm de altura
+        // Configura o documento exatamente para 50mm de largura por 25mm de altura
         const doc = new jsPDF({
             orientation: 'landscape',
             unit: 'mm',
@@ -146,7 +146,7 @@
         
         // Nome do Produto (Negrito e centralizado)
         doc.setFont('Helvetica', 'bold');
-        doc.setFontSize(12);
+        doc.setFontSize(10);
         // Centraliza o texto dinamicamente nos 50mm de largura
         doc.text(produto, 25, 6, { align: 'center' });
 
