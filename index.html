@@ -129,11 +129,11 @@
     function gerarPDF() {
         const { jsPDF } = window.jspdf;
         
-        // Configura o documento exatamente para 50mm de largura por 25mm de altura
+        // Configura o documento exatamente para 50mm de largura por 32mm de altura
         const doc = new jsPDF({
             orientation: 'landscape',
             unit: 'mm',
-            format: [50, 25]
+            format: [50, 32]
         });
 
         // Pega os valores atuais da tela
